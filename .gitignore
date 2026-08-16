@@ -1,0 +1,12 @@
+# Raw Zillow downloads and generated extracts stay out of git (sizes + Zillow revises history)
+data/
+extracts/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
