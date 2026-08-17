@@ -5,7 +5,14 @@ codes, ~8M monthly observations) loaded and modeled in Google BigQuery, validate
 Python reconciliation script, and published as an interactive Tableau Public dashboard
 focused on metro Atlanta against national benchmarks.
 
-> Work in progress — sections below are filled in as each phase ships.
+**🔗 Live dashboard:** [Atlanta Housing: Price & Value Explorer on Tableau Public](https://public.tableau.com/app/profile/mahir.haque/viz/AtlantaHousingPriceValueExplorer/AtlantaHousingExplorer_1)
+
+[![Dashboard](docs/dashboard.jpg)](https://public.tableau.com/app/profile/mahir.haque/viz/AtlantaHousingPriceValueExplorer/AtlantaHousingExplorer_1)
+
+**Headline finding (Jul 2026):** metro Atlanta's median zip ZHVI (~$363K) still sits well
+above the U.S. (~$290K), but the market has flipped — the urban core shows negative YoY
+growth while the outer ring stays positive, Atlanta ranks mid-30s among the top-50 metros
+for YoY growth, and its price-cut share runs above the national rate.
 
 ## Architecture
 
@@ -69,4 +76,16 @@ Zillow download, not the extract, so it tests the whole pipeline.
 
 ## Dashboard
 
-_Live link and screenshots added in Phase 4._
+Built and published entirely in **Tableau Public web authoring** (browser-based) at
+1300×800: a KPI row (ATL median ZHVI, YoY %, top-50 metro rank, US median, latest month
+auto-selected on open), a metro-Atlanta zip choropleth colored by YoY growth (diverging,
+centered at 0), top/bottom-10 zips by YoY (diverging bars via a RANK() table-calc filter),
+the sale-to-list ratio + price-cut share panes (ATL vs US, shared month axis — two stacked
+charts instead of a dual axis), and the indexed ZHVI trend (ATL vs GA vs US, table
+calculation `SUM([zhvi]) / LOOKUP(SUM([zhvi]), FIRST()) * 100` so all three geographies
+share one honest axis).
+
+Tableau-side extracts are slimmed/pre-shaped versions of the BigQuery marts
+(`zip_growth_ga_tableau.csv`, `benchmark_long.csv`, `metro_benchmark.csv`,
+`spread_atl.csv`) — the benchmark medians are pivoted long in pandas so the trend chart
+uses one measure + a geography dimension.
