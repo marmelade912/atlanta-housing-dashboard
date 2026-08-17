@@ -1,13 +1,13 @@
-# Atlanta Housing: Price & Value Explorer
+# Metropolitan Atlanta Housing
 
 End-to-end housing analytics pipeline: 25 years of Zillow home-value data (26K+ US zip
 codes, ~8M monthly observations) loaded and modeled in Google BigQuery, validated with a
 Python reconciliation script, and published as an interactive Tableau Public dashboard
 focused on metro Atlanta against national benchmarks.
 
-**🔗 Live dashboard:** [Atlanta Housing: Price & Value Explorer on Tableau Public](https://public.tableau.com/app/profile/mahir.haque/viz/AtlantaHousingPriceValueExplorer/AtlantaHousingExplorer_1)
+**🔗 Live dashboard:** [Metropolitan Atlanta Housing on Tableau Public](https://public.tableau.com/app/profile/mahir.haque/viz/AtlantaHousingPriceValueExplorer/MetropolitanAtlantaHousing)
 
-[![Dashboard](docs/dashboard.jpg)](https://public.tableau.com/app/profile/mahir.haque/viz/AtlantaHousingPriceValueExplorer/AtlantaHousingExplorer_1)
+[![Dashboard](docs/dashboard.jpg)](https://public.tableau.com/app/profile/mahir.haque/viz/AtlantaHousingPriceValueExplorer/MetropolitanAtlantaHousing)
 
 **Headline findings (Jul 2026):** metro Atlanta's median zip ZHVI (~$363K) still sits well
 above the U.S. (~$290K), but the market has flipped. Every core county is down year-over-year
@@ -79,15 +79,22 @@ Zillow download, not the extract, so it tests the whole pipeline.
 ## Dashboard
 
 Built and published entirely in **Tableau Public web authoring** (browser-based) at
-1300×800, six views with finding-style titles: a KPI row (ATL median ZHVI, YoY %, top-50
-metro rank, US median, latest month auto-selected on open), a metro-Atlanta zip choropleth
-colored by YoY growth (diverging, centered at 0, county in tooltips), a **county ranking**
-("Only the exurbs are growing") that answers "which county grew fastest?" at a glance,
-top/bottom-10 zips by YoY (diverging bars via a RANK() table-calc filter), the sale-to-list
-ratio + price-cut share panes (ATL vs US, shared month axis — two stacked charts instead of
-a dual axis), and the indexed ZHVI trend (ATL vs GA vs US, table calculation
-`SUM([zhvi]) / LOOKUP(SUM([zhvi]), FIRST()) * 100` so all three geographies share one
-honest axis).
+1300×800, six views, every title stating a finding rather than a chart type:
+
+1. **Snapshot** — latest-month KPIs (ATL median ZHVI, YoY %, top-50 metro rank, US median),
+   auto-updating via a latest-date filter.
+2. **Map** — "The closer to the core, the deeper the decline": zip choropleth of YoY growth,
+   diverging palette centered at 0, county in tooltips.
+3. **Boom winners** — "Since 2012 the cheapest zips tripled; the priciest merely doubled":
+   scatter of 2012 value vs growth multiple for all 188 metro zips (zips under $150K in 2012
+   averaged 3.5×; over $300K averaged 2.3×; 92 zips tripled, 25 quadrupled).
+4. **Off peak** — "Clayton −11%, Fulton −10%, Gwinnett −5%": each county's median vs its own
+   all-time peak; Fulton peaked first (Jul 2022) — the correction started intown.
+5. **Seller pressure** — Atlanta's price-cut share *minus* the U.S. rate, in percentage
+   points. Charting the gap (not two overlapping series on a zero-based axis) makes the
+   signal visible: ~1.5pp above the U.S. in 2018, ~4pp now.
+6. **Trend** — indexed ZHVI, metro Atlanta vs U.S. only, via the table calculation
+   `SUM([zhvi]) / LOOKUP(SUM([zhvi]), FIRST()) * 100` for one honest shared axis.
 
 Tableau-side extracts are slimmed/pre-shaped versions of the BigQuery marts
 (`zip_growth_ga_tableau.csv`, `benchmark_long.csv`, `metro_benchmark.csv`,
